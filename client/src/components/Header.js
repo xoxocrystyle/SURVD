@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import Payments from "./StripePayments";
 
 class Header extends Component {
   renderContent() {
@@ -9,15 +11,21 @@ class Header extends Component {
       case false:
         return (
           <li>
-            <a href="/auth/google">Login With Google</a>
+            <a href="/auth/google">Login</a>
           </li>
         );
       default:
-        return (
-          <li>
+        return [
+          <li key="1">
+            <Payments />
+          </li>,
+          <li key="3" style={{ margin: "0 0 0 15px" }}>
+            Credits: {this.props.auth.credits}
+          </li>,
+          <li key="2">
             <a href="/api/logout">Logout</a>
           </li>
-        );
+        ];
     }
   }
 
@@ -25,10 +33,13 @@ class Header extends Component {
     return (
       <nav>
         <div className="nav-wrapper blue-grey darken-4">
-          <a className="left brand-logo">Survd</a>
-          <ul className="right">
-            <li>{this.renderContent()}</li>
-          </ul>
+          <Link
+            to={this.props.auth ? "/surveys" : "/"}
+            className="left brand-logo"
+          >
+            Survd
+          </Link>
+          <ul className="right">{this.renderContent()}</ul>
         </div>
       </nav>
     );
